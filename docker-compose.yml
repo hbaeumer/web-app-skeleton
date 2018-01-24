@@ -1,0 +1,38 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - .:/var/www/html
+      - ./etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    networks:
+          - bridge
+  php:
+    build: ./etc/php
+    volumes:
+      - .:/var/www/html
+    networks:
+      - bridge
+  mysql:
+    image: mysql:8.0
+    networks:
+      - bridge
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: example
+      MYSQL_USER: example
+      MYSQL_PASSWORD: example
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - bridge
+
+networks:
+    bridge:
+        driver: bridge
